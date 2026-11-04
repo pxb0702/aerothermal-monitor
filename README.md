@@ -1,39 +1,34 @@
-# AeroThermal Monitor (V1.0)
+# AeroThermal Monitor (V2.0)
 
 A sleek, responsive dark-mode Windows hardware telemetry and thermal monitoring dashboard developed for the **Lenovo ThinkBook 14 G7+ IAH** featuring the **Intel Core Ultra 9 285H (Arrow Lake-H)** 16-Core processor.
 
 ![Platform](https://img.shields.io/badge/Platform-Windows%2011%20%7C%20x86__64-blue)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-green)
-![Version](https://img.shields.io/badge/Version-1.0.0-cyan)
+![Version](https://img.shields.io/badge/Version-2.0.0-cyan)
 ![License](https://img.shields.io/badge/License-MIT-orange)
 
 ---
 
-## ⚡ Features in V1.0
+## ⚡ What's New in Version 2.0
 
-- **🔥 16-Core CPU Matrix:**
-  - Real-time live temperature readings for all 6 Performance Cores (P-Cores) and 10 Efficient Cores (E-Cores).
-  - Dynamic thermal gauge bars with color transitions:
-    - 🔵 Cool (< 52°C)
-    - 🟢 Optimal (52°C - 68°C)
-    - 🟡 Warm (68°C - 82°C)
-    - 🔴 Hot (> 82°C)
-  - Core load percentages (0–100%) and continuous Min/Max tracking per core.
+- 🚀 **True Standalone Mode (Zero Core Temp Dependency):**
+  - Operates completely standalone without requiring Core Temp running in the background.
+  - Automatically detects whether Core Temp is active:
+    - If Core Temp is open: Seamlessly binds via shared memory for $0\%$ extra CPU load.
+    - If Core Temp is closed: Switches automatically to the **Native Standalone Engine**, calculating per-core live temperatures across all 16 physical cores.
+  - Visual mode pill in header indicates `● STANDALONE MODE (Native Engine)` or `● COMPANION MODE (Core Temp)`.
 
-- **📈 Real-Time Thermal Sparkline Chart:**
-  - Smooth animated historical chart tracking Package Temperature and Peak Hottest Core over rolling samples.
+- 🌡 **Full Multi-Component Temperature Tracking:**
+  - **🔥 CPU (16 Cores):** Individual live temperatures, loads, and Min/Max trackers for 6 P-Cores & 10 E-Cores.
+  - **🎮 GPU Core Temperature:** Real-time temperature for the Intel Arc 140T graphics tile with min/max tracking, 3D engine load, and core clock.
+  - **🔋 Battery Pack Temperature:** Smart battery thermistor telemetry (ATL L24N4PG7) with min/max tracking, voltage, and Conservation Mode health.
+  - **💾 NVMe SSD Temperature:** Dedicated controller temperature with min/max tracking and PCIe 4.0 health status for the YMTC NVMe SSD.
 
-- **🎮 Intel Arc 140T GPU Monitoring:**
-  - Real-time core clock (MHz), 3D engine utilization, and shared memory usage.
+- 📈 **Real-Time Thermal Sparkline Chart:**
+  - Live animated graph tracking Package Temperature vs. Hottest Core over rolling samples.
 
-- **🔋 Battery & Charging Health (L24N4PG7):**
-  - State of charge %, battery voltage, design vs. full capacity, wear level, and Conservation Mode detection.
-
-- **💾 System Memory & Storage:**
-  - 32GB LPDDR5x RAM usage metrics and local storage volume statuses.
-
-- **Zero Overhead Companion Mode:**
-  - Interfaces directly with Core Temp's shared memory (`CoreTempMappingObject`) for 0% extra CPU overhead and instantaneous startup without UAC elevation.
+- 🛡 **Integrated Elevation Helper:**
+  - One-click "Elevate Admin" button directly inside the app to unlock low-level kernel hooks when needed.
 
 ---
 
@@ -47,14 +42,14 @@ A sleek, responsive dark-mode Windows hardware telemetry and thermal monitoring 
   pip install customtkinter darkdetect psutil pythonnet
   ```
 
-### Launching V1.0
-Simply double-click:
+### Launching the Application
+Double-click:
 ```cmd
 Launch_Thermal_Monitor.bat
 ```
-or run from terminal:
-```bash
-python gui_app.py
+Or for elevated hardware hooks:
+```cmd
+Launch_Thermal_Monitor_Admin.bat
 ```
 
 ---
@@ -63,8 +58,8 @@ python gui_app.py
 
 ```
 ThermalMonitor/
-├── gui_app.py                 # CustomTkinter dark-mode graphical user interface
-├── sensor_manager.py          # Unified telemetry coordinator & Min/Max tracker
+├── gui_app.py                 # CustomTkinter dark-mode graphical user interface (V2.0)
+├── sensor_manager.py          # Unified telemetry coordinator & Standalone Engine
 ├── core_temp_api.py           # Core Temp Shared Memory CTypes wrapper
 ├── lhm_api.py                 # LibreHardwareMonitorLib .NET integration
 ├── system_telemetry.py        # System storage, memory, and battery telemetries
